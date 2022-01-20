@@ -2,7 +2,7 @@ const jet = require("fs-jetpack");
 
 function getContentFilesByLanguages({ contentDir, defaultLanguageCode, outDir, excludePaths, isDefaultLanguageInRoot }) {
   if (!(jet.exists(contentDir) === 'dir')) {
-    console.error(`[eblog] Could not find directory: "${contentDir}".`)
+    console.error(`[b4d] Could not find directory: "${contentDir}".`)
     return {}
   }
 

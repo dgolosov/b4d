@@ -1,7 +1,7 @@
 function printHelp() {
   console.log(`
-  [eblog] Usage:
-  npx eblog   
+  [b4d] Usage:
+  npx b4d   
   
   --init      Install dependencies and compose project
   --help      Help

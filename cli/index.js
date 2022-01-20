@@ -12,7 +12,7 @@ const args = require('minimist')(process.argv.slice(2), {
   ],
   unknown: function (unknownArgument) {
     console.error(
-      `[eblog] We don’t know what '${unknownArgument}' is. Use --help to see the list of supported commands.`
+      `[b4d] We don’t know what '${unknownArgument}' is. Use --help to see the list of supported commands.`
     )
     process.exit()
   },
@@ -23,7 +23,7 @@ const availableLanguages = ['ru', 'en']
 const isDefaultLanguageInRoot = true
 const overwritePrebuilt = true
 const overwriteContentBySources = false
-const srcDir = 'node_modules/eblog/src'
+const srcDir = 'node_modules/b4d/src'
 const contentDir = 'content'
 const outDir = 'prebuilt'
 
