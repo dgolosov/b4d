@@ -1,7 +1,7 @@
 {
-  "name": "i11ty",
+  "name": "eblog",
   "version": "0.0.0-development",
-  "description": "Utility for creating multiple language versions of a site on 11ty",
+  "description": "Static blog on 11ty with multiple language versions",
   "main": "./cli/index.js",
   "bin": "./cli/index.js",
   "scripts": {
@@ -13,6 +13,7 @@
     "url": "https://github.com/GolosovDL/i11ty.git"
   },
   "keywords": [
+    "blog",
     "11ty",
     "i18n"
   ],
