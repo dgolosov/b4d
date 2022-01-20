@@ -31,19 +31,19 @@ function updateUserPackageJSON({ outDir }) {
       "serve": `npx @11ty/eleventy --config=${outDir}/.eleventy.js --serve`,
       "build": `npx @11ty/eleventy --config=${outDir}/.eleventy.js`,
       "debug": `DEBUG=* npx @11ty/eleventy --config=${outDir}/.eleventy.js --dryrun`,
-      "prebuilt": "npx i11ty"
+      "prebuilt": "npx eblog"
     }
 
     jet.write('package.json', userPkg)
-    console.debug('[i11ty] Your package.json has been updated.')
+    console.debug('[eblog] Your package.json has been updated.')
   } catch (e) {
-    console.error('[i11ty] Unable to update your package.json')
+    console.error('[eblog] Unable to update your package.json')
   }
 }
 
 function installDependencies() {
   return new Promise(((resolve, reject) => {
-    console.log('[i11ty] Install dependencies...')
+    console.log('[eblog] Install dependencies...')
     const npm = spawn("npm", ["install"]);
 
     npm.stdout.on("data", data => {
@@ -60,10 +60,10 @@ function installDependencies() {
 
     npm.on("close", code => {
       if (code === 0) {
-        console.log(`[i11ty] Dependencies successfully installed.`);
+        console.log(`[eblog] Dependencies successfully installed.`);
         resolve()
       } else {
-        console.log(`[i11ty] Something went wrong :(`);
+        console.log(`[eblog] Something went wrong :(`);
         reject()
       }
     });

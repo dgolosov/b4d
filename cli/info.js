@@ -1,7 +1,7 @@
 function printHelp() {
   console.log(`
-  [i11ty] Usage:
-  npx i11ty   
+  [eblog] Usage:
+  npx eblog   
   
   --init      Install dependencies and compose project
   --help      Help

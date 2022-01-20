@@ -12,7 +12,7 @@ const args = require('minimist')(process.argv.slice(2), {
   ],
   unknown: function (unknownArgument) {
     console.error(
-      `[i11ty] We don’t know what '${unknownArgument}' is. Use --help to see the list of supported commands.`
+      `[eblog] We don’t know what '${unknownArgument}' is. Use --help to see the list of supported commands.`
     )
     process.exit()
   },
@@ -23,7 +23,7 @@ const availableLanguages = ['ru', 'en']
 const isDefaultLanguageInRoot = true
 const overwritePrebuilt = true
 const overwriteContentBySources = false
-const srcDir = 'node_modules/i11ty/src'
+const srcDir = 'node_modules/eblog/src'
 const contentDir = 'content'
 const outDir = 'prebuilt'
 
