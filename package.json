@@ -1,5 +1,5 @@
 {
-  "name": "eblog",
+  "name": "b4d",
   "version": "0.0.0-development",
   "description": "Static blog on 11ty with multiple language versions",
   "main": "./cli/index.js",
