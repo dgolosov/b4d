@@ -1,0 +1,53 @@
+{
+  "name": "i11ty",
+  "version": "0.0.0-development",
+  "description": "Utility for creating multiple language versions of a site on 11ty",
+  "main": "./cli/index.js",
+  "bin": "./cli/index.js",
+  "scripts": {
+    "semantic-release": "semantic-release",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GolosovDL/i11ty.git"
+  },
+  "keywords": [
+    "11ty",
+    "i18n"
+  ],
+  "author": "Dima Golosov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GolosovDL/i11ty/issues"
+  },
+  "homepage": "https://github.com/GolosovDL/i11ty#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^16.0.2",
+    "@commitlint/config-conventional": "^16.0.0",
+    "husky": "^7.0.0",
+    "husky-init": "^7.0.0",
+    "semantic-release": "^18.0.1",
+    "@11ty/eleventy": "1.0.0",
+    "@11ty/eleventy-navigation": "0.3.2",
+    "@tailwindcss/typography": "^0.5.0",
+    "autoprefixer": "^10.4.1",
+    "html-minifier": "^4.0.0",
+    "markdown-it": "^12.3.2",
+    "markdown-it-anchor": "^8.4.1",
+    "postcss": "^8.4.5",
+    "postcss-cli": "^9.0.1",
+    "postcss-import": "^14.0.2",
+    "tailwindcss": "^3.0.8"
+  },
+  "dependencies": {
+    "fs-jetpack": "^4.3.1",
+    "minimist": "^1.2.5"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "debug": true
+  }
+}
