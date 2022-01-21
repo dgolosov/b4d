@@ -7,6 +7,8 @@ function fixPath(path) {
 }
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.setUseGitIgnore(false);
+  
   const PATH_PREFIX = process.env.B4D_PATH_PREFIX ?? '/'
   const OUTPUT_DIR = 'dist'
   const INPUT_DIR = 'prebuilt'
