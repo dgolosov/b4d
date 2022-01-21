@@ -2,14 +2,18 @@ const fs = require("fs");
 const markdownItAnchor = require("markdown-it-anchor");
 const languages = require('./languages.json')
 
-const PATH_PREFIX = '/'
+const PATH_PREFIX = import.meta.env.B4D_PATH_PREFIX ?? '/'
 const OUTPUT_DIR = 'dist'
 const INPUT_DIR = 'prebuilt'
+
+function fixPath(path) {
+  return path.replace('//', '/')
+}
 
 const LANGUAGES = languages.map(function (language, idx) {
   return {
     ...language,
-    path: idx === 0 ? PATH_PREFIX : `${PATH_PREFIX}/${language.code}`.replace('//', '/')
+    path: fixPath(idx === 0 ? `/${PATH_PREFIX}` : `/${PATH_PREFIX}/${language.code}`)
   }
 })
 
