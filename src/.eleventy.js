@@ -7,7 +7,7 @@ function fixPath(path) {
 }
 
 module.exports = function(eleventyConfig) {
-  const PATH_PREFIX = import.meta.env.B4D_PATH_PREFIX ?? '/'
+  const PATH_PREFIX = process.env.B4D_PATH_PREFIX ?? '/'
   const OUTPUT_DIR = 'dist'
   const INPUT_DIR = 'prebuilt'
 
