@@ -25,6 +25,7 @@ const overwritePrebuilt = true
 const overwriteContentBySources = false
 const srcDir = 'node_modules/b4d/src'
 const contentDir = 'content'
+const overrideDir = 'overrides'
 const outDir = 'prebuilt'
 
 if (args.help) {
@@ -36,6 +37,7 @@ if (args.help) {
     outDir
   }).then(function () {
     compose({
+      overrideDir,
       defaultLanguageCode,
       availableLanguages,
       isDefaultLanguageInRoot,
@@ -48,6 +50,7 @@ if (args.help) {
   })
 } else {
   compose({
+    overrideDir,
     defaultLanguageCode,
     availableLanguages,
     isDefaultLanguageInRoot,

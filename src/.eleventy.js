@@ -3,7 +3,7 @@ const markdownItAnchor = require("markdown-it-anchor");
 const languages = require('./languages.json')
 
 function fixPath(path) {
-  return path.replace('//', '/')
+  return path.replace(/\/{2,}/g, '/')
 }
 
 module.exports = function(eleventyConfig) {
@@ -23,7 +23,6 @@ module.exports = function(eleventyConfig) {
     let matchedLanguageCode = LANGUAGES[0].code
 
     for (let i = 1; i < LANGUAGES.length; i++) {
-      console.log(urlPath, LANGUAGES[i].path)
       if (urlPath.indexOf(LANGUAGES[i].path) > -1) {
         matchedLanguageCode = LANGUAGES[i].code
         break

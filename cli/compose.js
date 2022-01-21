@@ -1,10 +1,11 @@
 const jet = require("fs-jetpack");
-const {getContentFilesByLanguages, copySources} = require("./utils");
+const {getContentFilesByLanguages, copySources, copyOverrides} = require("./utils");
 
-function compose({ contentDir, outDir, srcDir, defaultLanguageCode, isDefaultLanguageInRoot, availableLanguages, overwritePrebuilt, overwriteContentBySources }) {
+function compose({ contentDir, overrideDir, outDir, srcDir, defaultLanguageCode, isDefaultLanguageInRoot, availableLanguages, overwritePrebuilt, overwriteContentBySources }) {
   try {
     copySources({ srcDir, outDir, overwriteContentBySources })
     console.debug('[b4d] The template files have been copied successfully.')
+    copyOverrides({ overrideDir, outDir })
   } catch (e) {
     console.error('[b4d] Failed to copy template files.')
   }

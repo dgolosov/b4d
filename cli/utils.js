@@ -61,14 +61,22 @@ function contentFileToLanguageFileRecord({ filePath, defaultLanguageCode, isDefa
 }
 
 function fixPath(path) {
-  return path.replace('//', '/')
+  return path.replace(/\/{2,}/g, '/')
 }
 
 function copySources({ srcDir, outDir }) {
   jet.copy(srcDir, outDir, { overwrite: true })
 }
 
+function copyOverrides({ overrideDir, outDir }) {
+  if (jet.exists(overrideDir) === 'dir') {
+    jet.copy(overrideDir, outDir, { overwrite: true })
+    console.debug('[b4d] The template overrides have been copied successfully.')
+  }
+}
+
 module.exports = {
   getContentFilesByLanguages,
   copySources,
+  copyOverrides,
 }
