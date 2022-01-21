@@ -2,35 +2,35 @@ const fs = require("fs");
 const markdownItAnchor = require("markdown-it-anchor");
 const languages = require('./languages.json')
 
-const PATH_PREFIX = import.meta.env.B4D_PATH_PREFIX ?? '/'
-const OUTPUT_DIR = 'dist'
-const INPUT_DIR = 'prebuilt'
-
 function fixPath(path) {
   return path.replace('//', '/')
 }
 
-const LANGUAGES = languages.map(function (language, idx) {
-  return {
-    ...language,
-    path: fixPath(idx === 0 ? `/${PATH_PREFIX}` : `/${PATH_PREFIX}/${language.code}`)
-  }
-})
-
-function getLanguageCodeByURL(url) {
-  let matchedLanguageCode = LANGUAGES[0].code
-
-  for (let i = 1; i < LANGUAGES.length; i++) {
-    if (url.startsWith(LANGUAGES[i].path)) {
-      matchedLanguageCode = LANGUAGES[i].code
-      break
-    }
-  }
-
-  return matchedLanguageCode
-}
-
 module.exports = function(eleventyConfig) {
+  const PATH_PREFIX = import.meta.env.B4D_PATH_PREFIX ?? '/'
+  const OUTPUT_DIR = 'dist'
+  const INPUT_DIR = 'prebuilt'
+
+  const LANGUAGES = languages.map(function (language, idx) {
+    return {
+      ...language,
+      path: fixPath(idx === 0 ? `/${PATH_PREFIX}` : `/${PATH_PREFIX}/${language.code}`)
+    }
+  })
+
+  function getLanguageCodeByURL(url) {
+    let matchedLanguageCode = LANGUAGES[0].code
+
+    for (let i = 1; i < LANGUAGES.length; i++) {
+      if (url.startsWith(LANGUAGES[i].path)) {
+        matchedLanguageCode = LANGUAGES[i].code
+        break
+      }
+    }
+
+    return matchedLanguageCode
+  }
+
   eleventyConfig.addPlugin(require("@11ty/eleventy-navigation"));
 
   eleventyConfig.addTransform("minification", function(content) {
