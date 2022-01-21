@@ -19,10 +19,12 @@ module.exports = function(eleventyConfig) {
   })
 
   function getLanguageCodeByURL(url) {
+    const urlPath = fixPath(`/${PATH_PREFIX}/${url}`)
     let matchedLanguageCode = LANGUAGES[0].code
 
     for (let i = 1; i < LANGUAGES.length; i++) {
-      if (url.startsWith(LANGUAGES[i].path)) {
+      console.log(urlPath, LANGUAGES[i].path)
+      if (urlPath.indexOf(LANGUAGES[i].path) > -1) {
         matchedLanguageCode = LANGUAGES[i].code
         break
       }
