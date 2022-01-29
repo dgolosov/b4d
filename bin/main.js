@@ -6,6 +6,7 @@ class B4D {
     this.log = logger
     this.defaultLanguageCode = 'en'
     this.availableLanguages = []
+    this.intlData = {}
     this.isDefaultLanguageInRoot = true
     this.servicePkg = require('../package.json')
     this.skipTemplateOverride = args.ignoreOverride ?? false
@@ -67,12 +68,15 @@ class B4D {
       this.defaultLanguageCode = languages[0].code
 
       const availableLanguages = []
+      const intlData = {}
 
       languages.forEach(function(language) {
         availableLanguages.push(language.code)
+        intlData[language.code] = language
       })
 
       this.availableLanguages = availableLanguages
+      this.intlData = intlData
     }
   }
 
@@ -147,12 +151,28 @@ class B4D {
         delete filesByLanguages[language]
       } else {
         this.log.v(`Found ${filesByLanguages[language].length} files in language ${language.toUpperCase()}:`)
+
         for (const file of filesByLanguages[language]) {
           jet.copy(file.filePath, file.targetPath, { overwrite: true })
           this.log.v(`"${file.filePath}" copied to "${file.targetPath}"`)
         }
+
+        this.createIntlVariableForLangScope(language)
       }
     }
+  }
+
+  createIntlVariableForLangScope(langCode) {
+    let pathFile, data
+    if (langCode === this.defaultLanguageCode) {
+      pathFile = this.normalizePath(`${this.getOutPathByLang(langCode)}/data/intl.json`)
+      data = this.intlData[langCode]
+    } else {
+      pathFile = this.normalizePath(`${this.getOutPathByLang(langCode)}/${langCode}.json`)
+      data = { intl: this.intlData[langCode] }
+    }
+
+    jet.write(pathFile, data)
   }
 
   getContentFilesByLanguages() {
@@ -196,19 +216,21 @@ class B4D {
       targetPath = targetPath.replace(`.${languageCode}`, '')
     }
 
-    const isDefaultLanguage = languageCode === this.defaultLanguageCode
-
-    if (isDefaultLanguage && this.isDefaultLanguageInRoot) {
-      targetPath = targetPath.replace(this.contentDir, `${this.outDir}/`)
-    } else {
-      targetPath = targetPath.replace(this.contentDir, `${this.outDir}/${languageCode}/`)
-    }
+    targetPath = targetPath.replace(this.contentDir, this.getOutPathByLang(languageCode))
 
     return {
       filePath: filePath,
       targetPath: this.normalizePath(targetPath),
       languageCode: languageCode,
     }
+  }
+
+  getOutPathByLang(lang) {
+    if (lang === this.defaultLanguageCode && this.isDefaultLanguageInRoot) {
+      return this.normalizePath(`${this.outDir}/`)
+    }
+
+    return this.normalizePath(`${this.outDir}/${lang}/`)
   }
 
   printHelp() {

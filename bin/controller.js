@@ -1,6 +1,7 @@
 const B4D = require("./main");
 const Logger = require("./logger");
 
+// todo add force option for delete all old temporal files
 // todo add watch command
 // todo refactor to promise based style
 class Controller {

@@ -1,10 +1,14 @@
 [
   {
-    "code": "ru",
-    "label": "Русский"
+    "code": "en",
+    "label": "English",
+    "lang": "en",
+    "title": "Site Title In English"
   },
   {
-    "code": "en",
-    "label": "English"
+    "code": "ru",
+    "label": "Русский",
+    "lang": "ru-RU",
+    "title": "Тайтл по-русски"
   }
 ]

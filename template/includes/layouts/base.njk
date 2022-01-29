@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="{{ language or 'ru' }}">
+<html lang="{{ intl.lang }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or meta.title }}</title>
+    <title>{{ title or intl.title }}</title>
     <link rel="preload" href="{{ '/css/main.min.css' | url }}" as="style">
     <link rel="stylesheet" href="{{ '/css/main.min.css' | url }}"/>
     <script>
