@@ -2,11 +2,15 @@
   "name": "b4d",
   "version": "0.0.0-development",
   "description": "Static blog on 11ty with multiple language versions",
-  "main": "./cli/index.js",
-  "bin": "./cli/index.js",
+  "main": "./bin/index.js",
+  "bin": "./bin/index.js",
   "scripts": {
     "semantic-release": "semantic-release",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "serve": "npx @11ty/eleventy --config=prebuilt/.eleventy.js --serve",
+    "build": "npx @11ty/eleventy --config=prebuilt/.eleventy.js",
+    "debug": "DEBUG=* npx @11ty/eleventy --config=prebuilt/.eleventy.js --dryrun",
+    "prebuilt": "node bin --templateDir=template"
   },
   "repository": {
     "type": "git",
