@@ -2,6 +2,7 @@ const B4D = require("./main");
 const Logger = require("./logger");
 
 // todo add watch command
+// todo refactor to promise based style
 class Controller {
   defaultCommand = 'prebuilt'
   commands = ['prebuilt', 'install']
@@ -19,6 +20,7 @@ class Controller {
         "templateDir",
         "contentDir",
         "prebuiltDir",
+        "languagesPath",
       ],
       boolean: [
         "version",

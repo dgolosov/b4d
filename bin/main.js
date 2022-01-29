@@ -4,12 +4,8 @@ const {spawn} = require("child_process");
 class B4D {
   constructor(args, logger) {
     this.log = logger
-
-    // todo import languages from languages.json
-    // todo first entry in languages.json is default lang
-    // todo others is available
-    this.defaultLanguageCode = 'ru'
-    this.availableLanguages = ['ru', 'en']
+    this.defaultLanguageCode = 'en'
+    this.availableLanguages = []
     this.isDefaultLanguageInRoot = true
     this.servicePkg = require('../package.json')
     this.skipTemplateOverride = args.ignoreOverride ?? false
@@ -18,6 +14,7 @@ class B4D {
     this.templateDir = args.templateDir ?? 'node_modules/b4d/template'
     this.templateOverrideDir = 'overrides'
     this.contentDir = args.contentDir ?? 'content'
+    this.languagesConfigPath = args.languagesPath ?? `${this.contentDir}/languages.json`
     this.contentIgnorePaths = undefined
     this.outDir = args.prebuiltDir ?? 'prebuilt'
   }
@@ -56,6 +53,27 @@ class B4D {
     }
 
     return devDependencies
+  }
+
+  getLanguages() {
+    if (!jet.exists(this.languagesConfigPath) === 'file') {
+      this.log.e(`Languages config file not found`)
+      process.exit(1)
+    }
+
+    const languages = jet.read(this.languagesConfigPath, 'json')
+
+    if (languages.length) {
+      this.defaultLanguageCode = languages[0].code
+
+      const availableLanguages = []
+
+      languages.forEach(function(language) {
+        availableLanguages.push(language.code)
+      })
+
+      this.availableLanguages = availableLanguages
+    }
   }
 
   updateUserPackageJSON() {
@@ -114,6 +132,7 @@ class B4D {
   }
 
   compose() {
+    this.getLanguages()
     this.copyTemplateFiles()
 
     const filesByLanguages = this.getContentFilesByLanguages()
@@ -206,6 +225,7 @@ class B4D {
       '   --templateDir       Custom path to template directory',
       '   --contentDir        Custom path to content directory',
       '   --prebuiltDir       Custom path to prebuilt directory',
+      '   --languagesPath     Custom path to languages.json file',
     ].join("\n"))
   }
 
