@@ -5,18 +5,21 @@ class B4D {
   constructor(args, logger) {
     this.log = logger
 
+    // todo import languages from languages.json
+    // todo first entry in languages.json is default lang
+    // todo others is available
     this.defaultLanguageCode = 'ru'
     this.availableLanguages = ['ru', 'en']
     this.isDefaultLanguageInRoot = true
-    this.overwritePrebuilt = true
     this.servicePkg = require('../package.json')
+    this.skipTemplateOverride = args.ignoreOverride ?? false
 
     // paths
-    this.templateDir = 'node_modules/b4d/template'
+    this.templateDir = args.templateDir ?? 'node_modules/b4d/template'
     this.templateOverrideDir = 'overrides'
-    this.contentDir = 'content'
+    this.contentDir = args.contentDir ?? 'content'
     this.contentIgnorePaths = undefined
-    this.outDir = 'prebuilt'
+    this.outDir = args.prebuiltDir ?? 'prebuilt'
   }
 
   install() {
@@ -30,7 +33,7 @@ class B4D {
       "serve": `npx @11ty/eleventy --config=${this.outDir}/.eleventy.js --serve`,
       "build": `npx @11ty/eleventy --config=${this.outDir}/.eleventy.js`,
       "debug": `DEBUG=* npx @11ty/eleventy --config=${this.outDir}/.eleventy.js --dryrun`,
-      "prebuilt": "npx b4d"
+      "prebuilt": "npx b4d prebuilt"
     }
   }
 
@@ -126,7 +129,7 @@ class B4D {
       } else {
         this.log.v(`Found ${filesByLanguages[language].length} files in language ${language.toUpperCase()}:`)
         for (const file of filesByLanguages[language]) {
-          jet.copy(file.filePath, file.targetPath, { overwrite: this.overwritePrebuilt })
+          jet.copy(file.filePath, file.targetPath, { overwrite: true })
           this.log.v(`"${file.filePath}" copied to "${file.targetPath}"`)
         }
       }
@@ -192,11 +195,17 @@ class B4D {
   printHelp() {
     this.log.i([
       'Usage:',
-      'npx b4d',
+      '   npx b4d',
+      '   npx b4d install    Install template dependencies & update package.json',
+      '   npx b4d prebuilt   Pre-built',
       '',
-      '--init      Install dependencies and compose project',
-      '--help      Help',
-      '--version   Version of package',
+      'Options:',
+      '   -h, --help          Print the list of supported commands',
+      '   -v, --version       Print installed version of b4d',
+      '   --ignoreOverride    Skip overriding files in template',
+      '   --templateDir       Custom path to template directory',
+      '   --contentDir        Custom path to content directory',
+      '   --prebuiltDir       Custom path to prebuilt directory',
     ].join("\n"))
   }
 
@@ -205,7 +214,7 @@ class B4D {
       this.copyDir(this.templateDir, this.outDir)
       this.log.v('template files have been copied successfully')
 
-      if (jet.exists(this.templateOverrideDir) === 'dir') {
+      if (!this.skipTemplateOverride && jet.exists(this.templateOverrideDir) === 'dir') {
         this.copyDir(this.templateOverrideDir, this.outDir)
         this.log.v('template override files have been copied successfully')
       }
