@@ -6,6 +6,7 @@
     <title>{{ title or intl.title }}</title>
     <link rel="preload" href="{{ '/css/main.min.css' | url }}" as="style">
     <link rel="stylesheet" href="{{ '/css/main.min.css' | url }}"/>
+    {% hreflang intl.lang, page.url %}
     <script>
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark')
@@ -15,7 +16,7 @@
     </script>
   </head>
   <body class="flex flex-col h-screen antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 p-4 md:p-6 xl:px-8">
-    {% include "header.njk" %}
+    {% include "navigation.njk" %}
 
     <main class="flex flex-col flex-grow">
       {{ content | safe }}
