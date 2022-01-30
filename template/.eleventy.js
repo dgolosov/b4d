@@ -13,8 +13,11 @@ module.exports = function(eleventyConfig) {
   const OUTPUT_DIR = 'dist'
   const INPUT_DIR = 'prebuilt'
 
-  const LANGUAGES = languages.map(function (language, idx) {
-    return {
+  const LANGUAGES = {}
+  const DEFAULT_LANGUAGE_CODE = languages[0].code ?? 'en'
+
+  languages.forEach(function (language, idx) {
+    LANGUAGES[language.code] = {
       ...language,
       path: fixPath(idx === 0 ? `/${PATH_PREFIX}` : `/${PATH_PREFIX}/${language.code}`)
     }
@@ -22,16 +25,53 @@ module.exports = function(eleventyConfig) {
 
   function getLanguageCodeByURL(url) {
     const urlPath = fixPath(`/${PATH_PREFIX}/${url}`)
-    let matchedLanguageCode = LANGUAGES[0].code
+    let matchedLanguageCode = DEFAULT_LANGUAGE_CODE
 
-    for (let i = 1; i < LANGUAGES.length; i++) {
-      if (urlPath.indexOf(LANGUAGES[i].path) > -1) {
-        matchedLanguageCode = LANGUAGES[i].code
+    for (let i = 1; i < Object.entries(LANGUAGES).length; i++) {
+      if (urlPath.indexOf(Object.entries(LANGUAGES)[i][1].path) > -1) {
+        matchedLanguageCode = Object.entries(LANGUAGES)[i][1].code
         break
       }
     }
 
     return matchedLanguageCode
+  }
+
+  function getCanonicalURL(url) {
+    const langCode = getLanguageCodeByURL(url)
+
+    if (langCode === DEFAULT_LANGUAGE_CODE) {
+      return url
+    }
+
+    const canonicalURL = url.replace(LANGUAGES[langCode].path, LANGUAGES[DEFAULT_LANGUAGE_CODE].path)
+
+    return fixPath(canonicalURL)
+  }
+
+  function getAllLanguagesForURL(url, isAbsolute = false) {
+    const urlByLang = {}
+    const canonicalURL = getCanonicalURL(url)
+
+    if (isAbsolute) {
+      urlByLang[DEFAULT_LANGUAGE_CODE] = fixPath(`${LANGUAGES[DEFAULT_LANGUAGE_CODE].base_url}/${canonicalURL}`)
+    } else {
+      urlByLang[DEFAULT_LANGUAGE_CODE] = canonicalURL
+    }
+    // extract path from lang
+    const relativeURL = canonicalURL.replace(LANGUAGES[DEFAULT_LANGUAGE_CODE], '')
+
+    for (const lang in LANGUAGES) {
+      if (lang !== DEFAULT_LANGUAGE_CODE) {
+        if (isAbsolute) {
+          urlByLang[lang] = fixPath(`${LANGUAGES[lang].base_url}/${relativeURL}`)
+        } else {
+          urlByLang[lang] = fixPath(`${LANGUAGES[lang].path}/${relativeURL}`)
+        }
+      }
+    }
+
+    return urlByLang
   }
 
   eleventyConfig.addPlugin(require("@11ty/eleventy-navigation"));
@@ -112,15 +152,70 @@ module.exports = function(eleventyConfig) {
     })
   });
 
-  eleventyConfig.addFilter("onlyOtherLanguages", function(value, url) {
-    const pageLanguage = getLanguageCodeByURL(url)
 
-    return value.filter(function(language) {
-      return language.code !== pageLanguage
-    })
+  eleventyConfig.addShortcode("intl_switcher", function(pageUrl) {
+    const pageLang = getLanguageCodeByURL(pageUrl)
+
+    const urlByLang = getAllLanguagesForURL(pageUrl)
+
+    let output = ''
+
+    for (const lang in urlByLang) {
+      if (lang !== pageLang) {
+        const url = urlByLang[lang]
+        const languageLabel = LANGUAGES[lang].label ?? lang.toUpperCase()
+
+        output += `
+          <a class="hidden sm:block hover:text-slate-900 hover:dark:text-white transition" href="${url}">
+            ${languageLabel}
+          </a>
+        `
+      }
+    }
+
+    return output
+  })
+
+  eleventyConfig.addShortcode("intl_links", function(pageUrl) {
+    const pageLang = getLanguageCodeByURL(pageUrl)
+
+    const urlByLang = getAllLanguagesForURL(pageUrl)
+
+    let output = ''
+
+    for (const lang in urlByLang) {
+      const url = urlByLang[lang]
+      const languageLabel = LANGUAGES[lang].label ?? lang.toUpperCase()
+
+      output += `
+          <a href="${url}" class="flex border-t last:border-b items-center w-full justify-center px-4 h-14 hover:text-slate-900 transition underline-offset-4${lang === pageLang ? ' underline' : ''}">
+            ${languageLabel}
+          </a>
+        `
+    }
+
+    return output
+  })
+
+  eleventyConfig.addShortcode("hreflang", function(lang_code, url) {
+    const pageLang = getLanguageCodeByURL(url)
+
+    const urlByLang = getAllLanguagesForURL(url, true)
+
+    let output = ''
+
+    for (const lang in urlByLang) {
+      if (lang !== pageLang) {
+        const url = urlByLang[lang]
+        const languageLang = LANGUAGES[lang].lang ?? lang
+
+        output += `
+        <link rel="alternate" href="${url}" hrefLang="${languageLang}"/>
+        `
+      }
+    }
+    return output
   });
-
-  eleventyConfig.addGlobalData("languages", LANGUAGES);
 
   return {
     templateFormats: [ "md", "njk", "html" ],

@@ -1,8 +1,10 @@
 const B4D = require("./main");
 const Logger = require("./logger");
 
-// todo add watch command
+// todo add handling non-exist input folders
+// todo add custom paths support to .eleventy.js
 // todo refactor to promise based style
+// todo add watch command
 class Controller {
   defaultCommand = 'prebuilt'
   commands = ['prebuilt', 'install']
@@ -25,9 +27,10 @@ class Controller {
       boolean: [
         "version",
         "help",
-        "ignoreOverride"
+        "ignoreOverride",
+        "force",
       ],
-      alias: { h: 'help', v: 'version' },
+      alias: { h: 'help', v: 'version', f: 'force' },
       unknown: function(unknownArgument) {
         const isValidArg = validateUnknownArgument(unknownArgument, commands, commandsAliases)
         if (!isValidArg) {
