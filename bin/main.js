@@ -10,6 +10,7 @@ class B4D {
     this.isDefaultLanguageInRoot = true
     this.servicePkg = require('../package.json')
     this.skipTemplateOverride = args.ignoreOverride ?? false
+    this.deletePrebuiltDir = args.force ?? false
 
     // paths
     this.templateDir = args.templateDir ?? 'node_modules/b4d/template'
@@ -248,10 +249,14 @@ class B4D {
       '   --contentDir        Custom path to content directory',
       '   --prebuiltDir       Custom path to prebuilt directory',
       '   --languagesPath     Custom path to languages.json file',
+      '   -f, --force         Delete prebuilt directory before pre-built',
     ].join("\n"))
   }
 
   copyTemplateFiles() {
+    if (this.deletePrebuiltDir && jet.exists(this.outDir) === 'dir') {
+      jet.remove(this.outDir)
+    }
     try {
       this.copyDir(this.templateDir, this.outDir)
       this.log.v('template files have been copied successfully')
