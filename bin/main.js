@@ -178,13 +178,11 @@ class B4D {
 
   getContentFilesByLanguages() {
     if (!(jet.exists(this.contentDir) === 'dir')) {
-      // todo extract validation input params in separate method
       this.log.e(`Could not find directory: "${this.contentDir}".`)
       return {}
     }
 
     const languages = {}
-    // todo add contentIgnorePaths param in HELP
     const excludes = this.contentIgnorePaths ? this.contentIgnorePaths.map(function(path) {
       return `!${path}`
     }) : '*'

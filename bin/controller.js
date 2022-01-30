@@ -1,10 +1,6 @@
 const B4D = require("./main");
 const Logger = require("./logger");
 
-// todo add handling non-exist input folders
-// todo add custom paths support to .eleventy.js
-// todo refactor to promise based style
-// todo add watch command
 class Controller {
   defaultCommand = 'prebuilt'
   commands = ['prebuilt', 'install']

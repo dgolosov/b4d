@@ -11,6 +11,10 @@ const precacheResources = [
   '/icons/favicon-32x32.png',
 ];
 
+self.addEventListener('message', function handler (event) {
+  console.log(event.data);
+});
+
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(cacheName)
