@@ -49,20 +49,25 @@ module.exports = function(eleventyConfig) {
     return fixPath(canonicalURL)
   }
 
-  function getAllLanguagesForURL(url) {
+  function getAllLanguagesForURL(url, isAbsolute = false) {
     const urlByLang = {}
     const canonicalURL = getCanonicalURL(url)
 
-    // todo add base_url to url
-
-    urlByLang[DEFAULT_LANGUAGE_CODE] = canonicalURL
-
+    if (isAbsolute) {
+      urlByLang[DEFAULT_LANGUAGE_CODE] = fixPath(`${LANGUAGES[DEFAULT_LANGUAGE_CODE].base_url}/${canonicalURL}`)
+    } else {
+      urlByLang[DEFAULT_LANGUAGE_CODE] = canonicalURL
+    }
     // extract path from lang
     const relativeURL = canonicalURL.replace(LANGUAGES[DEFAULT_LANGUAGE_CODE], '')
 
     for (const lang in LANGUAGES) {
       if (lang !== DEFAULT_LANGUAGE_CODE) {
-        urlByLang[lang] = fixPath(`${LANGUAGES[lang].path}/${relativeURL}`)
+        if (isAbsolute) {
+          urlByLang[lang] = fixPath(`${LANGUAGES[lang].base_url}/${relativeURL}`)
+        } else {
+          urlByLang[lang] = fixPath(`${LANGUAGES[lang].path}/${relativeURL}`)
+        }
       }
     }
 
@@ -147,7 +152,6 @@ module.exports = function(eleventyConfig) {
     })
   });
 
-  eleventyConfig.addGlobalData("languages", LANGUAGES);
 
   eleventyConfig.addShortcode("intl_switcher", function(pageUrl) {
     const pageLang = getLanguageCodeByURL(pageUrl)
@@ -162,7 +166,7 @@ module.exports = function(eleventyConfig) {
         const languageLabel = LANGUAGES[lang].label ?? lang.toUpperCase()
 
         output += `
-          <a class="hover:text-slate-900 hover:dark:text-white transition" href="${url}">
+          <a class="hidden sm:block hover:text-slate-900 hover:dark:text-white transition" href="${url}">
             ${languageLabel}
           </a>
         `
@@ -172,10 +176,31 @@ module.exports = function(eleventyConfig) {
     return output
   })
 
+  eleventyConfig.addShortcode("intl_links", function(pageUrl) {
+    const pageLang = getLanguageCodeByURL(pageUrl)
+
+    const urlByLang = getAllLanguagesForURL(pageUrl)
+
+    let output = ''
+
+    for (const lang in urlByLang) {
+      const url = urlByLang[lang]
+      const languageLabel = LANGUAGES[lang].label ?? lang.toUpperCase()
+
+      output += `
+          <a href="${url}" class="flex border-t last:border-b items-center w-full justify-center px-4 h-14 hover:text-slate-900 transition underline-offset-4${lang === pageLang ? ' underline' : ''}">
+            ${languageLabel}
+          </a>
+        `
+    }
+
+    return output
+  })
+
   eleventyConfig.addShortcode("hreflang", function(lang_code, url) {
     const pageLang = getLanguageCodeByURL(url)
 
-    const urlByLang = getAllLanguagesForURL(url)
+    const urlByLang = getAllLanguagesForURL(url, true)
 
     let output = ''
 

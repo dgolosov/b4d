@@ -3,12 +3,28 @@
     "code": "en",
     "label": "English",
     "lang": "en",
-    "title": "Site Title In English"
+    "base_url": "http://localhost:8080/",
+    "title": "Site Title In English",
+    "description": "Meta description in English",
+    "logo": "blog",
+    "ui": {
+      "menu_mobile_title": "Menu",
+      "intl_mobile_title": "Select language",
+      "dark_mode_toggle_title": "Switch dark and light theme"
+    }
   },
   {
     "code": "ru",
     "label": "Русский",
     "lang": "ru-RU",
-    "title": "Тайтл по-русски"
+    "base_url": "http://localhost:8080/ru/",
+    "title": "Тайтл по-русски",
+    "description": "Мета описание по-русски",
+    "logo": "блог",
+    "ui": {
+      "menu_mobile_title": "Меню",
+      "intl_mobile_title": "Выберите язык",
+      "dark_mode_toggle_title": "Переключатель темной и светлой темы"
+    }
   }
 ]
