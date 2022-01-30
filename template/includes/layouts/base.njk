@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title or intl.title }}</title>
     <meta name="description" content="{{ description or intl.description }}">
+    <link rel="manifest" href="{{ '/manifest.json' | url }}">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="white">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="black">
+    <link rel="apple-touch-icon" href="{{ '/icons/apple-touch-icon.png' | url }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ '/icons/favicon-32x32.png ' | url }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ '/icons/favicon-16x16.png' | url }}">
     <link rel="preload" href="{{ '/css/main.min.css' | url }}" as="style">
     <link rel="stylesheet" href="{{ '/css/main.min.css' | url }}"/>
     {% hreflang intl.lang, page.url %}
@@ -67,6 +73,18 @@
         menuEl.classList.remove('hidden')
         menuEl.classList.add('flex', 'animate-fadein')
         menuContentEl.classList.add('animate-slidein')
+      }
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+            .then(function() {
+              console.log('😎');
+            })
+            .catch(function() {
+              console.log('🤷‍')
+            })
+        });
       }
     </script>
   </body>

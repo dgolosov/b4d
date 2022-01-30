@@ -107,6 +107,9 @@ module.exports = function(eleventyConfig) {
   })
 
   eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/img`);
+  eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/service-worker.js`);
+  eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/manifest.json`);
+  eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/icons`);
 
   let markdownLibrary = require("markdown-it")({
     html: true,
@@ -139,7 +142,8 @@ module.exports = function(eleventyConfig) {
       },
     },
     ui: false,
-    ghostMode: false
+    ghostMode: false,
+    snippet: false,
   });
 
   eleventyConfig.addFilter("multiLangNav", function(value, url) {
