@@ -5,6 +5,9 @@
 As Is %)
 
 ## To Do
-
-[ ] add css minification 
-[ ] add manifest customization features
+- [ ] add caching config:
+  - [ ] network-first
+  - [ ] offline-first
+  - [ ] pre-cache
+  - [ ] custom offline page
+- [ ] add manifest config
