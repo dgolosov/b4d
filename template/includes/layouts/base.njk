@@ -15,12 +15,15 @@
         document.documentElement.classList.remove('dark')
       }
     </script>
+    {% block headend %}{% endblock %}
   </head>
   <body class="relative flex flex-col pt-14 items-center min-h-screen antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 transition-colors duration-500">
     {% include "navigation.njk" %}
 
     <main class="w-full flex-grow max-w-screen-2xl px-4 md:px-6 xl:px-8">
-      {{ content | safe }}
+      {% block content %}
+        {{ content | safe }}
+      {% endblock %}
     </main>
 
     <footer></footer>
@@ -69,5 +72,6 @@
         menuContentEl.classList.add('animate-slidein')
       }
     </script>
+    {% block bodyend %}{% endblock %}
   </body>
 </html>
