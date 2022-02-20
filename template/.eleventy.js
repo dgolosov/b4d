@@ -94,7 +94,8 @@ module.exports = function(eleventyConfig) {
         require('postcss-import'),
         require('tailwindcss/nesting'),
         require('tailwindcss')(`${INPUT_DIR}/tailwind.config.js`),
-        require('autoprefixer')
+        require('autoprefixer'),
+        require('cssnano')({ preset: 'default' }),
       ])
         .process(css, { from: `${INPUT_DIR}/css/main.css`, to: `${OUTPUT_DIR}/css/main.min.css` })
         .then(result => {

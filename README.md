@@ -14,7 +14,7 @@ Core:
 - [ ] add contentIgnorePaths option
 
 Template:
-- [ ] add css minification
+- [x] add css minification
 - [ ] add caching config:
   - [ ] network-first
   - [ ] offline-first
