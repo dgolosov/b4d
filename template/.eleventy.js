@@ -94,7 +94,8 @@ module.exports = function(eleventyConfig) {
         require('postcss-import'),
         require('tailwindcss/nesting'),
         require('tailwindcss')(`${INPUT_DIR}/tailwind.config.js`),
-        require('autoprefixer')
+        require('autoprefixer'),
+        require('cssnano')({ preset: 'default' })
       ])
         .process(css, { from: `${INPUT_DIR}/css/main.css`, to: `${OUTPUT_DIR}/css/main.min.css` })
         .then(result => {
@@ -107,6 +108,9 @@ module.exports = function(eleventyConfig) {
   })
 
   eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/img`);
+  eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/service-worker.js`);
+  eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/manifest.json`);
+  eleventyConfig.addPassthroughCopy(`${INPUT_DIR}/icons`);
 
   let markdownLibrary = require("markdown-it")({
     html: true,
@@ -139,7 +143,8 @@ module.exports = function(eleventyConfig) {
       },
     },
     ui: false,
-    ghostMode: false
+    ghostMode: false,
+    snippet: false,
   });
 
   eleventyConfig.addFilter("multiLangNav", function(value, url) {
